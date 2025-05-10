@@ -21,7 +21,7 @@ public class TaskDAO {
     }
 
     public void create(Task task) {
-        log.info("Creating task-{}", task.getId());
+        log.info("Creating task: {}", task.getDescription());
         taskRepository.save(task);
     }
 

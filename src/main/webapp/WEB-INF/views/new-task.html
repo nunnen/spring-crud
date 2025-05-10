@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/tasks}" th:object="${task}">
+    <label for="description">Add description: </label>
+    <input th:field="*{description}" id="description" type="text">
+
+    <label for="status">Select status: </label>
+    <select id="status" th:field="*{status}" name="statusValue">
+        <option th:each="status : ${T(com.vunnen.springcrud.model.Status).values()}"
+                th:text="${status}"
+                th:value="${status}">
+        </option>
+    </select>
+
+    <input type="submit" value="Create!">
+</form>
+
+</body>
+</html>

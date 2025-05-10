@@ -7,8 +7,11 @@
 <body>
 
 <div th:each="task : ${tasks}">
-    <p th:text="${task.getDescription()}">TASK TEXT</p>
+    <a th:href="@{/tasks/{id}(id=${task.getId()})}" th:text="${task.getDescription()}">TASK TEXT</a>
 </div>
+
+<hr/>
+<a th:href="@{/tasks/new}">Create new task</a>
 
 </body>
 </html>
