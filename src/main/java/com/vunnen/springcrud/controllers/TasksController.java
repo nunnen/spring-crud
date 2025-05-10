@@ -24,7 +24,8 @@ public class TasksController {
     @GetMapping
     public String getTasks(@RequestParam(name = "page", defaultValue = "0", required = false) int page,
                            @RequestParam(name = "pageSize", defaultValue = "5", required = false) int pageSize,
-                           Model model) {
+                           Model model,
+                           @ModelAttribute("task") Task task) {
 
         List<Task> tasks = taskDAO.readAll(page, pageSize);
         model.addAttribute("tasks", tasks);
@@ -37,11 +38,6 @@ public class TasksController {
         Task task = taskDAO.read(id);
         model.addAttribute("task", task);
         return "task";
-    }
-
-    @GetMapping("/new")
-    public String newTaskView(@ModelAttribute("task") Task task) {
-        return "new-task";
     }
 
     @PostMapping

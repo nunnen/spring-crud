@@ -11,7 +11,19 @@
 </div>
 
 <hr/>
-<a th:href="@{/tasks/new}">Create new task</a>
+<form th:method="POST" th:action="@{/tasks}" th:object="${task}">
+    <label for="description">Add description: </label>
+    <input th:field="*{description}" id="description" type="text">
 
+    <label for="status">Select status: </label>
+    <select id="status" th:field="*{status}" name="statusValue">
+        <option th:each="status : ${T(com.vunnen.springcrud.model.Status).values()}"
+                th:text="${status}"
+                th:value="${status}">
+        </option>
+    </select>
+
+    <input type="submit" value="Create new task!">
+</form>
 </body>
 </html>
