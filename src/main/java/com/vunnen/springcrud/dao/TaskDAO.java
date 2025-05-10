@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -27,6 +28,11 @@ public class TaskDAO {
         log.info("Reading task-{}", id);
         Optional<Task> optionalTask = taskRepository.findById(id);
         return optionalTask.orElse(null);
+    }
+
+    public List<Task> readAll() {
+        log.info("Reading all tasks");
+        return taskRepository.findAll();
     }
 
     public boolean update(int id, Task updatedTask) {

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tasks</title>
+</head>
+<body>
+
+<div th:each="task : ${tasks}">
+    <p th:text="${task.getDescription()}">TASK TEXT</p>
+</div>
+
+</body>
+</html>
