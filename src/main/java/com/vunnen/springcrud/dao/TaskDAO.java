@@ -4,6 +4,7 @@ import com.vunnen.springcrud.model.Task;
 import com.vunnen.springcrud.repositories.TaskRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -33,6 +34,11 @@ public class TaskDAO {
     public List<Task> readAll() {
         log.info("Reading all tasks");
         return taskRepository.findAll();
+    }
+
+    public List<Task> readAll(int pageNumber, int pageSize) {
+        log.info("Reading all tasks with pageable");
+        return taskRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
     }
 
     public boolean update(int id, Task updatedTask) {
