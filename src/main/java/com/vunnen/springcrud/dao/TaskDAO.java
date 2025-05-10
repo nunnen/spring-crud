@@ -41,7 +41,7 @@ public class TaskDAO {
         return taskRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
     }
 
-    public boolean update(int id, Task updatedTask) {
+    public void update(int id, Task updatedTask) {
         Optional<Task> optionalTask = taskRepository.findById(id);
 
         if (optionalTask.isPresent()) {
@@ -50,15 +50,12 @@ public class TaskDAO {
             task.setDescription(updatedTask.getDescription());
             task.setStatus(updatedTask.getStatus());
             taskRepository.save(task);
-            return true;
         }
         log.warn("No task found with id {}", id);
-        return false;
     }
 
-    public boolean delete(int id) {
+    public void delete(int id) {
         log.info("Deleting task-{}", id);
         taskRepository.deleteById(id);
-        return false;
     }
 }
