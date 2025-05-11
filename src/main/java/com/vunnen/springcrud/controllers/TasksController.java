@@ -1,9 +1,8 @@
 package com.vunnen.springcrud.controllers;
 
-import com.vunnen.springcrud.dao.TaskDAO;
 import com.vunnen.springcrud.model.Task;
+import com.vunnen.springcrud.service.TasksService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +13,10 @@ import java.util.List;
 @RequestMapping("/tasks")
 @Slf4j
 public class TasksController {
-    private final TaskDAO taskDAO;
+    private final TasksService service;
 
-    @Autowired
-    public TasksController(TaskDAO taskDAO) {
-        this.taskDAO = taskDAO;
+    public TasksController(TasksService service) {
+        this.service = service;
     }
 
     @GetMapping
@@ -27,7 +25,7 @@ public class TasksController {
                            Model model,
                            @ModelAttribute("task") Task task) {
 
-        List<Task> tasks = taskDAO.readAll(page, pageSize);
+        List<Task> tasks = service.readAll(page, pageSize);
         model.addAttribute("tasks", tasks);
 
         return "index";
@@ -35,21 +33,21 @@ public class TasksController {
 
     @GetMapping("/{id}")
     public String getTask(@PathVariable(name = "id") int id, Model model) {
-        Task task = taskDAO.read(id);
+        Task task = service.read(id);
         model.addAttribute("task", task);
         return "task";
     }
 
     @PostMapping
     public String addNewTask(@ModelAttribute("task") Task task) {
-        taskDAO.create(task);
+        service.create(task);
         return "redirect:/tasks?pageSize=50";
     }
 
     @GetMapping("/{id}/edit")
     public String updateTaskView(Model model,
                                  @PathVariable(name = "id") int id) {
-        Task task = taskDAO.read(id);
+        Task task = service.read(id);
         model.addAttribute("task", task);
         return "update";
     }
@@ -57,13 +55,13 @@ public class TasksController {
     @PatchMapping("/{id}")
     public String updateTask(@ModelAttribute("task") Task task,
                              @PathVariable(name = "id") int id) {
-        taskDAO.update(id, task);
+        service.update(id, task);
         return "redirect:/tasks/{id}";
     }
 
     @DeleteMapping("/{id}")
     public String deleteTask(@PathVariable(name = "id") int id) {
-        taskDAO.delete(id);
+        service.delete(id);
         return "redirect:/tasks";
     }
 }

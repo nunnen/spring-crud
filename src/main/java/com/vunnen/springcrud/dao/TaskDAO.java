@@ -63,4 +63,9 @@ public class TaskDAO {
         log.info("Deleting task-{}", id);
         taskRepository.deleteById(id);
     }
+
+    public int getNumOfTasks() {
+        log.info("Getting number of tasks");
+        return taskRepository.findAll().size();
+    }
 }
