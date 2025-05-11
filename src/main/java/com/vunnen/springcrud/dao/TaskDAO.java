@@ -6,12 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Component
 @Slf4j
+@Transactional(readOnly = true)
 public class TaskDAO {
     private final TaskRepository taskRepository;
 
@@ -20,6 +22,7 @@ public class TaskDAO {
         this.taskRepository = taskRepository;
     }
 
+    @Transactional
     public void create(Task task) {
         log.info("Creating task: {}", task.getDescription());
         taskRepository.save(task);
@@ -41,6 +44,7 @@ public class TaskDAO {
         return taskRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
     }
 
+    @Transactional
     public void update(int id, Task updatedTask) {
         Optional<Task> optionalTask = taskRepository.findById(id);
 
@@ -54,6 +58,7 @@ public class TaskDAO {
         log.warn("No task found with id {}", id);
     }
 
+    @Transactional
     public void delete(int id) {
         log.info("Deleting task-{}", id);
         taskRepository.deleteById(id);
