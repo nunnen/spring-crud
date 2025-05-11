@@ -99,6 +99,7 @@
     </dependencies>
 
     <build>
+        <finalName>root</finalName>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -125,6 +126,11 @@
                     <source>21</source>
                     <target>21</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
             </plugin>
         </plugins>
     </build>
