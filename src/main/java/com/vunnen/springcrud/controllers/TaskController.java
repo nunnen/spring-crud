@@ -1,7 +1,7 @@
 package com.vunnen.springcrud.controllers;
 
 import com.vunnen.springcrud.model.Task;
-import com.vunnen.springcrud.service.TasksService;
+import com.vunnen.springcrud.service.TaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,10 +12,10 @@ import java.util.List;
 @Controller
 @RequestMapping("/tasks")
 @Slf4j
-public class TasksController {
-    private final TasksService service;
+public class TaskController {
+    private final TaskService service;
 
-    public TasksController(TasksService service) {
+    public TaskController(TaskService service) {
         this.service = service;
     }
 

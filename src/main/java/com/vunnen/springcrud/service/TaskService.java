@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class TasksService {
+public class TaskService {
     private final TaskDAO taskDAO;
 
-    public TasksService(TaskDAO taskDAO) {
+    public TaskService(TaskDAO taskDAO) {
         this.taskDAO = taskDAO;
     }
 
