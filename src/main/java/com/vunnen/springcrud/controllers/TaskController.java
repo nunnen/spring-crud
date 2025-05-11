@@ -20,13 +20,14 @@ public class TaskController {
     }
 
     @GetMapping
-    public String getTasks(@RequestParam(name = "page", defaultValue = "0", required = false) int page,
-                           @RequestParam(name = "pageSize", defaultValue = "5", required = false) int pageSize,
+    public String getTasks(@RequestParam(name = "page", defaultValue = "1", required = false) int page,
+                           @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize,
                            Model model,
                            @ModelAttribute("task") Task task) {
 
         List<Task> tasks = service.readAll(page, pageSize);
         model.addAttribute("tasks", tasks);
+        log.info("page nums = {}", service.getPageNumbers(pageSize));
 
         return "index";
     }

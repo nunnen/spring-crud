@@ -41,7 +41,7 @@ public class TaskDAO {
 
     public List<Task> readAll(int pageNumber, int pageSize) {
         log.info("Reading all tasks with pageable");
-        return taskRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        return taskRepository.findAll(PageRequest.of(--pageNumber, pageSize)).getContent();
     }
 
     @Transactional
