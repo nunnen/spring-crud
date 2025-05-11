@@ -27,7 +27,9 @@ public class TaskController {
 
         List<Task> tasks = service.readAll(page, pageSize);
         model.addAttribute("tasks", tasks);
-        log.info("page nums = {}", service.getPageNumbers(pageSize));
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("totalPages", service.getPageNumbers(pageSize));
 
         return "index";
     }
@@ -42,7 +44,7 @@ public class TaskController {
     @PostMapping
     public String addNewTask(@ModelAttribute("task") Task task) {
         service.create(task);
-        return "redirect:/tasks?pageSize=50";
+        return "redirect:/tasks";
     }
 
     @GetMapping("/{id}/edit")

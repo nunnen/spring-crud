@@ -34,11 +34,15 @@ public class TaskService {
         taskDAO.delete(id);
     }
 
-    private int getTotalTasks() {
+    public int getTotalTasks() {
         return taskDAO.getNumOfTasks();
     }
 
     public int getPageNumbers(int pageSize) {
-        return getTotalTasks() / pageSize;
+        return ceiling((double) getTotalTasks() / pageSize);
+    }
+
+    private int ceiling(double num) {
+        return (int) Math.ceil(num);
     }
 }
