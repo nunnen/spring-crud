@@ -3,28 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <title>Tasks</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 6px;
+        }
+    </style>
 </head>
 <body>
 
-<div th:each="task : ${tasks}">
-    <a th:href="@{/tasks/{id}(id=${task.getId()})}" th:text="${task.getDescription()}">TASK TEXT</a>
-</div>
-
-<hr/>
-<form th:method="POST" th:action="@{/tasks}" th:object="${task}">
-    <label for="description">Add description: </label>
-    <input th:field="*{description}" id="description" type="text">
-
-    <label for="status">Select status: </label>
-    <select id="status" th:field="*{status}" name="statusValue">
-        <option th:each="status : ${T(com.vunnen.springcrud.model.Status).values()}"
-                th:text="${status}"
-                th:value="${status}">
-        </option>
-    </select>
-
-    <input type="submit" value="Create new task!">
-</form>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="task : ${tasks}" th:attr="data-id=${task.id}">
+        <td th:text="${task.id}">1</td>
+        <td><input type="text" th:value="${task.description}" class="desc-input"/></td>
+        <td>
+            <select class="status-select">
+                <option th:each="status : ${T(com.vunnen.springcrud.model.Status).values()}"
+                        th:value="${status}" th:text="${status}"
+                        th:selected="${status == task.status}">
+                </option>
+            </select>
+        </td>
+        <td>
+            <button class="save-btn">Save</button>
+            <form th:method="DELETE" th:action="@{/tasks/{id}(id=${task.id})}" style="display:inline;">
+                <input type="submit" value="Delete">
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
 
 <div class="pagination" th:if="${totalPages > 1}">
     <span th:each="i : ${#numbers.sequence(1, totalPages)}">
@@ -33,8 +51,38 @@
            th:text="${i}"></a>
         <span th:unless="${i != currentPage}"
               th:text="${i}"
-              class="current-page"></span>
+              class="current-page"
+              style="font-weight: bold; margin: 0 5px;"></span>
     </span>
 </div>
+
+
+<script>
+    document.querySelectorAll(".save-btn").forEach(btn => {
+        btn.addEventListener("click", async (e) => {
+            const row = e.target.closest("tr");
+            const id = row.getAttribute("data-id");
+            const description = row.querySelector(".desc-input").value;
+            const status = row.querySelector(".status-select").value;
+
+            const payload = { description, status };
+
+            const response = await fetch(`/tasks/${id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                alert("Task updated!");
+            } else {
+                alert("Update failed.");
+            }
+        });
+    });
+</script>
+
 </body>
 </html>

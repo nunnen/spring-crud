@@ -3,6 +3,7 @@ package com.vunnen.springcrud.controllers;
 import com.vunnen.springcrud.model.Task;
 import com.vunnen.springcrud.service.TaskService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,32 +35,10 @@ public class TaskController {
         return "index";
     }
 
-    @GetMapping("/{id}")
-    public String getTask(@PathVariable(name = "id") int id, Model model) {
-        Task task = service.read(id);
-        model.addAttribute("task", task);
-        return "task";
-    }
-
     @PostMapping
     public String addNewTask(@ModelAttribute("task") Task task) {
         service.create(task);
         return "redirect:/tasks";
-    }
-
-    @GetMapping("/{id}/edit")
-    public String updateTaskView(Model model,
-                                 @PathVariable(name = "id") int id) {
-        Task task = service.read(id);
-        model.addAttribute("task", task);
-        return "update";
-    }
-
-    @PatchMapping("/{id}")
-    public String updateTask(@ModelAttribute("task") Task task,
-                             @PathVariable(name = "id") int id) {
-        service.update(id, task);
-        return "redirect:/tasks/{id}";
     }
 
     @DeleteMapping("/{id}")
@@ -67,4 +46,13 @@ public class TaskController {
         service.delete(id);
         return "redirect:/tasks";
     }
+
+    @PatchMapping(value = "/{id}", consumes = "application/json")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public void updateTaskJson(@RequestBody Task task, @PathVariable("id") int id) {
+        service.update(id, task);
+    }
+
+
 }
