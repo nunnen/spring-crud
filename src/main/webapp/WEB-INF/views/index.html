@@ -2,19 +2,17 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Tasks</title>
-    <style>
-        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-            padding: 6px;
-        }
-    </style>
-</head>
-<body>
+    <title>Task Manager</title>
 
-<table>
-    <thead>
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container py-4">
+
+<h1 class="mb-4 text-center">Task Manager</h1>
+
+<table class="table table-bordered table-hover align-middle">
+    <thead class="table-dark">
     <tr>
         <th>ID</th>
         <th>Description</th>
@@ -25,38 +23,55 @@
     <tbody>
     <tr th:each="task : ${tasks}" th:attr="data-id=${task.id}">
         <td th:text="${task.id}">1</td>
-        <td><input type="text" th:value="${task.description}" class="desc-input"/></td>
+        <td><input type="text" th:value="${task.description}" class="form-control desc-input"/></td>
         <td>
-            <select class="status-select">
+            <select class="form-select status-select">
                 <option th:each="status : ${T(com.vunnen.springcrud.model.Status).values()}"
                         th:value="${status}" th:text="${status}"
                         th:selected="${status == task.status}">
                 </option>
             </select>
         </td>
-        <td>
-            <button class="save-btn">Save</button>
-            <form th:method="DELETE" th:action="@{/tasks/{id}(id=${task.id})}" style="display:inline;">
-                <input type="submit" value="Delete">
+        <td class="d-flex gap-2">
+            <button class="btn btn-sm btn-primary save-btn">Save</button>
+            <form th:method="DELETE" th:action="@{/tasks/{id}(id=${task.id})}" style="margin: 0;">
+                <input type="submit" value="Delete" class="btn btn-sm btn-danger">
             </form>
         </td>
     </tr>
     </tbody>
 </table>
 
-<div class="pagination" th:if="${totalPages > 1}">
-    <span th:each="i : ${#numbers.sequence(1, totalPages)}">
-        <a th:if="${i != currentPage}"
-           th:href="@{/tasks(page=${i}, pageSize=${pageSize})}"
-           th:text="${i}"></a>
-        <span th:unless="${i != currentPage}"
-              th:text="${i}"
-              class="current-page"
-              style="font-weight: bold; margin: 0 5px;"></span>
-    </span>
-</div>
+<h4 class="mt-5">Add New Task</h4>
+<form th:method="POST" th:action="@{/tasks}" th:object="${task}" class="row g-3 align-items-center">
+    <div class="col-md-6">
+        <input th:field="*{description}" class="form-control" placeholder="Task description"/>
+    </div>
+    <div class="col-md-3">
+        <select th:field="*{status}" class="form-select">
+            <option th:each="status : ${T(com.vunnen.springcrud.model.Status).values()}"
+                    th:text="${status}" th:value="${status}">
+            </option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-success">Add Task</button>
+    </div>
+</form>
 
+<!-- Pagination -->
+<nav class="mt-4" th:if="${totalPages > 1}">
+    <ul class="pagination justify-content-center">
+        <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
+            th:classappend="${i == currentPage} ? 'active'">
+            <a class="page-link"
+               th:href="@{/tasks(page=${i}, pageSize=${pageSize})}"
+               th:text="${i}">1</a>
+        </li>
+    </ul>
+</nav>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     document.querySelectorAll(".save-btn").forEach(btn => {
         btn.addEventListener("click", async (e) => {
