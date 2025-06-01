@@ -1,0 +1,27 @@
+services:
+  app:
+    build: /
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql_db:
+        condition: service_healthy
+  mysql_db:
+    container_name: mysql-db
+    image: mysql:8.0-debian
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: task
+    ports:
+      - "3307:3307"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./src/main/resources/init.sql:/docker-entrypoint-initdb.d/dump.sql
+    healthcheck:
+      test: "usr/bin/mysql --user=root --password=root --execute \"SHOW DATABASES;\""
+      interval: 2s
+      timeout: 30s
+      retries: 10
+
+volumes:
+  mysql-data:
