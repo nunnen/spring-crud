@@ -1,4 +1,14 @@
-Для запуска проекта нужно:
+# Spring CRUD Application
+
+Учебное Spring-приложение с CRUD-операциями, сборкой WAR и запуском через Docker + Tomcat.
+Основные технологии:
+- Java 21 + Spring Framework
+- Hibernate / Spring Data JPA
+- MySQL 8 через Docker
+- Dockerfile + docker-compose
+- WAR-деплой на Tomcat
+
+## Для запуска проекта нужно:
 
 1. Клонировать данный репозиторий
 2. Собрать проект в Maven: mvn clean install
